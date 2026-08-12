@@ -5,7 +5,7 @@ function App() {
     <div className="container">
       <header>
         <h1>Min Hyeong Kim</h1>
-        <p className="subtitle">M.S. Student · Human-Computer Interaction Lab, Seoul National University</p>
+        <p className="subtitle">M.S. Student · <a href="https://hcil.snu.ac.kr" target="_blank" rel="noreferrer">Human-Computer Interaction Lab</a>, Seoul National University</p>
         <p className="contact">
           <a href="mailto:mhkim@hcil.snu.ac.kr">mhkim@hcil.snu.ac.kr</a>
           {' · '}
@@ -16,7 +16,7 @@ function App() {
       <section>
         <p>
           I am an M.S. student in Computer Science and Engineering at Seoul National University,
-          advised by <a href="https://hcil.snu.ac.kr" target="_blank" rel="noreferrer">Prof. Jinwook Seo</a>.
+          advised by <a href="https://hcil.snu.ac.kr/people/jinwook-seo" target="_blank" rel="noreferrer">Prof. Jinwook Seo</a>.
           My research interests lie in <strong>information visualization</strong> and <strong>human-computer interaction</strong>.
         </p>
       </section>
