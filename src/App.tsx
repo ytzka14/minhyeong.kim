@@ -1,16 +1,22 @@
 import './App.css'
+import photo from './assets/minhyeong_kim_casual.jpeg'
 
 function App() {
   return (
     <div className="container">
       <header>
-        <h1>Min Hyeong Kim</h1>
-        <p className="subtitle">M.S. Student · <a href="https://hcil.snu.ac.kr" target="_blank" rel="noreferrer">Human-Computer Interaction Lab</a>, Seoul National University</p>
-        <p className="contact">
-          <a href="mailto:mhkim@hcil.snu.ac.kr">mhkim@hcil.snu.ac.kr</a>
-          {' · '}
-          <a href="https://hcil.snu.ac.kr/people/min-hyeong-kim" target="_blank" rel="noreferrer">HCIL Profile</a>
-        </p>
+        <div className="header-inner">
+          <div className="header-text">
+            <h1>Min Hyeong Kim</h1>
+            <p className="subtitle">M.S. Student · <a href="https://hcil.snu.ac.kr" target="_blank" rel="noreferrer">Human-Computer Interaction Lab</a>, Seoul National University</p>
+            <p className="contact">
+              <a href="mailto:mhkim@hcil.snu.ac.kr">mhkim at hcil.snu.ac.kr</a>
+              {' · '}
+              <a href="https://hcil.snu.ac.kr/people/min-hyeong-kim" target="_blank" rel="noreferrer">HCIL Profile</a>
+            </p>
+          </div>
+          <img src={photo} alt="Min Hyeong Kim" className="profile-photo" />
+        </div>
       </header>
 
       <section>
