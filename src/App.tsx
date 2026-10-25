@@ -8,7 +8,7 @@ function App() {
         <div className="header-inner">
           <div className="header-text">
             <h1>Min Hyeong Kim</h1>
-            <p className="subtitle">M.S. Student · <a href="https://hcil.snu.ac.kr" target="_blank" rel="noreferrer">Human-Computer Interaction Lab</a>, Seoul National University</p>
+            <p className="subtitle">Ph.D. Student · <a href="https://hcil.snu.ac.kr" target="_blank" rel="noreferrer">Human-Computer Interaction Lab</a>, Seoul National University</p>
             <p className="contact">
               <a href="mailto:mhkim@hcil.snu.ac.kr">mhkim at hcil.snu.ac.kr</a>
               {' · '}
@@ -21,7 +21,7 @@ function App() {
 
       <section>
         <p>
-          I am an M.S. student in Computer Science and Engineering at Seoul National University,
+          I am a Ph.D. student in Computer Science and Engineering at Seoul National University,
           advised by <a href="https://hcil.snu.ac.kr/people/jinwook-seo" target="_blank" rel="noreferrer">Prof. Jinwook Seo</a>.
           My research interests lie in <strong>information visualization</strong> and <strong>human-computer interaction</strong>.
         </p>
@@ -73,8 +73,15 @@ function App() {
         <h2>Education</h2>
         <div className="entry">
           <div className="entry-header">
-            <span>M.S. in Computer Science and Engineering, Seoul National University</span>
-            <span className="date">2025.03 – Present</span>
+            <span>Ph.D. in Computer Science and Engineering, Seoul National University (Cont'd from M.S.)</span>
+            <span className="date">2026.09 – Present</span>
+          </div>
+          <div className="entry-body">Advisor: Prof. Jinwook Seo</div>
+        </div>
+        <div className="entry">
+          <div className="entry-header">
+            <span>M.S. in Computer Science and Engineering, Seoul National University (Ph.D. Integrated Course)</span>
+            <span className="date">2025.03 – 2026.08</span>
           </div>
           <div className="entry-body">Advisor: Prof. Jinwook Seo</div>
         </div>
@@ -142,7 +149,19 @@ function App() {
         <div className="entry">
           <div className="entry-header">
             <span>TA · Information Visualization and Visual Analytics (M1522.000500), SNU</span>
-            <span className="date">2025 Fall</span>
+            <span className="date">2025 Fall, 2026 Fall</span>
+          </div>
+        </div>
+        <div className="entry">
+          <div className="entry-header">
+            <span>Junior Reviewer</span>
+            <span className="date">IEEE VIS 2026</span>
+          </div>
+        </div>
+        <div className="entry">
+          <div className="entry-header">
+            <span>Reviewer</span>
+            <span className="date">ACM CHI 2027</span>
           </div>
         </div>
       </section>
