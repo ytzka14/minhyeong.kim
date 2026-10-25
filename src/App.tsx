@@ -167,7 +167,7 @@ function App() {
       </section>
 
       <footer>
-        <p>Last updated: August 2026</p>
+        <p>Last updated: October 2026</p>
       </footer>
     </div>
   )
