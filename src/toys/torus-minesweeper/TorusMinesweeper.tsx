@@ -1,9 +1,9 @@
 import {
-  useCallback, useEffect, useMemo, useRef, useState,
+  useCallback, useEffect, useRef, useState,
   type CSSProperties, type MouseEvent, type PointerEvent, type WheelEvent,
 } from 'react'
 import TorusCanvas, { type RGB, type TorusCell } from '../shared/TorusCanvas.tsx'
-import { chord, mod, neighbors, newGame, reveal, toggleFlag, type Game } from './game.ts'
+import { chord, mod, newGame, reveal, toggleFlag, type Game } from './game.ts'
 import './torus-minesweeper.css'
 
 const DIFFICULTIES = [
@@ -66,7 +66,6 @@ export default function TorusMinesweeper() {
   const [game, setGame] = useState<Game>(() => newGame(diff.rows, diff.cols, diff.mines))
   const [view, setView] = useState<View>({ offR: 0, offC: 0 })
   const [flagMode, setFlagMode] = useState(false)
-  const [hovered, setHovered] = useState<number | null>(null)
   const [best, setBest] = useState<Record<string, number>>(() => load(BEST_KEY, {}))
 
   // ---- Timer ----
@@ -85,7 +84,6 @@ export default function TorusMinesweeper() {
     setGame(newGame(d.rows, d.cols, d.mines))
     setStartedAt(null)
     setEndedAt(null)
-    setHovered(null)
     setView({ offR: 0, offC: 0 })
   }
 
@@ -203,14 +201,6 @@ export default function TorusMinesweeper() {
   const displayCols: number[] = []
   for (let j = -margin; j < cols + margin; j++) displayCols.push(j)
 
-  // Hovering a number shows its eight neighbours, wrap included.
-  const hoverSet = useMemo(() => {
-    if (hovered === null || game.cells[hovered]?.state !== 'revealed' || game.cells[hovered].adj === 0) {
-      return new Set<number>()
-    }
-    return new Set(neighbors(rows, cols, hovered))
-  }, [hovered, game, rows, cols])
-
   const lost = game.status === 'lost'
   const won = game.status === 'won'
 
@@ -288,7 +278,6 @@ export default function TorusMinesweeper() {
                 onPointerUp={onPointerUp}
                 onPointerCancel={onPointerUp}
                 onWheel={onWheel}
-                onMouseLeave={() => setHovered(null)}
               >
                 {displayRows.map((di) => (
                   <div className="board-row" key={di}>
@@ -309,8 +298,6 @@ export default function TorusMinesweeper() {
                         cell.state === 'revealed' && cell.mine && 'mine',
                         game.exploded === i && 'exploded',
                         wrongFlag && 'wrong',
-                        hoverSet.has(i) && 'neighbor',
-                        hovered === i && hoverSet.size > 0 && 'hover-source',
                       ]
                         .filter(Boolean)
                         .join(' ')
@@ -324,7 +311,6 @@ export default function TorusMinesweeper() {
                           data-n={cell.state === 'revealed' && !cell.mine ? cell.adj : undefined}
                           onClick={guardClick(() => onCellClick(i))}
                           onContextMenu={(e) => onCellContextMenu(e, i)}
-                          onMouseEnter={() => setHovered(i)}
                           aria-label={`Row ${r + 1}, column ${c + 1}: ${
                             cell.state === 'revealed' ? (cell.mine ? 'mine' : `${cell.adj} adjacent mines`) : cell.state
                           }`}
@@ -405,7 +391,7 @@ export default function TorusMinesweeper() {
               <summary>How it works</summary>
               <ul>
                 <li>The grid wraps around both ways: off the top is the bottom, off the left is the right.</li>
-                <li>So every cell has exactly eight neighbours. Hover a number to see them, even across the wrap.</li>
+                <li>So every cell has exactly eight neighbours, even along the seams.</li>
                 <li>Click to reveal. Right-click (or use flag mode) to flag a mine.</li>
                 <li>Click a number whose mines are all flagged to open the rest of its neighbours.</li>
                 <li>Your first click is always safe. Drag, scroll, or use the arrow keys to roll the board.</li>

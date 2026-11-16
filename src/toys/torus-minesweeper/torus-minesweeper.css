@@ -209,22 +209,6 @@
   filter: brightness(0.6) saturate(0.6);
 }
 
-/* The eight neighbours of the hovered number. */
-.torus-minesweeper .cell.neighbor::after,
-.torus-minesweeper .cell.hover-source::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.torus-minesweeper .cell.neighbor::after {
-  box-shadow: inset 0 0 0 2px rgb(95 196 184 / 0.85);
-  background: rgb(95 196 184 / 0.12);
-}
-.torus-minesweeper .cell.hover-source::after {
-  box-shadow: inset 0 0 0 2px rgb(95 196 184 / 0.4);
-}
-
 /* Dashed line wherever the visible board crosses the wrap. */
 .torus-minesweeper .cell.seam-top::before,
 .torus-minesweeper .cell.seam-left::before {
