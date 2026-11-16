@@ -1,0 +1,561 @@
+/* Scoped copy of torus-chess index.css + App.css: every selector lives under .torus-chess
+   so the game and the homepage cannot restyle each other. */
+
+.torus-chess {
+  --bg: #1d1b19;
+  --panel: #27241f;
+  --panel-2: #312d27;
+  --line: #433d34;
+  --text: #ece6da;
+  --muted: #a39a8a;
+  --accent: #e0a84a;
+  --light-sq: #e9dcc0;
+  --dark-sq: #9c7a54;
+
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: dark;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.torus-chess * {
+  box-sizing: border-box;
+}
+
+.torus-chess button,
+.torus-chess select {
+  font: inherit;
+  color: inherit;
+}
+
+/* The homepage's own heading font must not leak into the game. */
+.torus-chess h1,
+.torus-chess h2 {
+  font-family: inherit;
+}
+
+.torus-chess .app {
+  /* Height of the top panel plus its padding, plus the homepage nav above the
+     game, reserved when sizing the board. */
+  --topbar-h: calc(72px + var(--site-nav-h));
+  min-height: calc(100vh - var(--site-nav-h));
+}
+
+/* ---------- Top panel (title + view controls) ----------
+   A card centred on the screen above the board. It's centred on the
+   viewport rather than sized to the board, so its position never depends
+   on the board's size: dragging a margin slider can't move the slider. */
+
+.torus-chess .topbar {
+  display: flex;
+  justify-content: center;
+  padding: 16px 16px 0;
+}
+.torus-chess .top-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 0;
+  padding: 10px 6px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+/* Each group is separated from the next by a thin divider. */
+.torus-chess .top-panel > * {
+  padding: 0 16px;
+}
+.torus-chess .top-panel > * + * {
+  border-left: 1px solid var(--line);
+}
+.torus-chess .brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.torus-chess .brand h1 {
+  margin: 0;
+  font-size: 1.3rem;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.torus-chess .tagline {
+  color: var(--muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.torus-chess .tool-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.torus-chess .topbar button {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 5px 10px;
+  min-width: 34px;
+  cursor: pointer;
+}
+.torus-chess .topbar button:hover {
+  border-color: var(--accent);
+}
+
+.torus-chess .layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 16px;
+}
+
+/* ---------- Board ---------- */
+
+.torus-chess .board-area {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.torus-chess .board-frame {
+  padding: 10px;
+  background: #2e2a24;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.45);
+}
+
+.torus-chess .board {
+  /* --rows / --cols include the ghost rows/cols plus one row and column of labels. */
+  --cell: min(
+    calc((100vh - var(--topbar-h) - 64px) / (var(--rows) + 1)),
+    calc((100vw - 440px) / (var(--cols) + 1)),
+    60px
+  );
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  touch-action: none;
+  cursor: grab;
+}
+.torus-chess .board:active {
+  cursor: grabbing;
+}
+
+.torus-chess .board-row {
+  display: flex;
+}
+
+.torus-chess .cell {
+  position: relative;
+  width: var(--cell);
+  height: var(--cell);
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  outline: none;
+}
+.torus-chess .cell.light {
+  background: var(--light-sq);
+}
+.torus-chess .cell.dark {
+  background: var(--dark-sq);
+}
+.torus-chess .cell.ghost {
+  filter: saturate(0.4) brightness(0.62);
+}
+.torus-chess .cell.ghost .piece {
+  opacity: 0.75;
+}
+
+/* Dashed line wherever the visible board crosses the wrap. */
+.torus-chess .cell.seam-top::before,
+.torus-chess .cell.seam-left::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+}
+.torus-chess .cell.seam-top::before {
+  left: 0;
+  right: 0;
+  top: -1px;
+  border-top: 2px dashed rgb(224 168 74 / 0.85);
+}
+.torus-chess .cell.seam-left::after {
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  border-left: 2px dashed rgb(224 168 74 / 0.85);
+}
+
+.torus-chess .cell.last {
+  box-shadow: inset 0 0 0 999px rgb(224 190 60 / 0.38);
+}
+.torus-chess .cell.selected {
+  box-shadow: inset 0 0 0 999px rgb(90 160 90 / 0.55);
+}
+.torus-chess .cell.check {
+  background-image: radial-gradient(circle, rgb(230 40 30 / 0.95) 0%, rgb(230 40 30 / 0.55) 45%, transparent 75%);
+}
+/* ---- Check routes ---- */
+.torus-chess .cell.check-path {
+  background-image: linear-gradient(rgb(230 40 30 / 0.22), rgb(230 40 30 / 0.22));
+}
+.torus-chess .route {
+  --w: max(3px, calc(var(--cell) * 0.09));
+  position: absolute;
+  left: 50%;
+  top: calc(50% - var(--w) / 2);
+  width: calc(var(--cell) * var(--len));
+  height: var(--w);
+  background: rgb(214 38 28 / 0.85);
+  transform-origin: 0 50%;
+  transform: rotate(var(--angle));
+  pointer-events: none;
+  z-index: 1;
+}
+.torus-chess .attacker-ring {
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  border: max(2px, calc(var(--cell) * 0.07)) solid rgb(214 38 28 / 0.95);
+  box-shadow: 0 0 8px rgb(214 38 28 / 0.7);
+  pointer-events: none;
+  z-index: 1;
+}
+.torus-chess .cell .piece {
+  z-index: 2;
+}
+
+.torus-chess .cell .dot {
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+  background: rgb(30 60 30 / 0.45);
+  pointer-events: none;
+}
+.torus-chess .cell.target-capture {
+  background-image: radial-gradient(circle, transparent 62%, rgb(30 60 30 / 0.5) 64%);
+}
+.torus-chess .cell.target-move:hover,
+.torus-chess .cell.target-capture:hover {
+  box-shadow: inset 0 0 0 999px rgb(90 160 90 / 0.35);
+}
+.torus-chess .piece {
+  position: relative;
+  font-size: calc(var(--cell) * 0.78);
+  line-height: 1;
+  font-family: 'Segoe UI Symbol', 'Apple Symbols', 'DejaVu Sans', 'Noto Sans Symbols 2', serif;
+  pointer-events: none;
+}
+.torus-chess .piece.white {
+  color: #fffaf0;
+  text-shadow:
+    0 0 1px #000, 1px 0 0 #2a2420, -1px 0 0 #2a2420, 0 1px 0 #2a2420, 0 -1px 0 #2a2420,
+    0 2px 3px rgb(0 0 0 / 0.35);
+}
+.torus-chess .piece.black {
+  color: #1f1b18;
+  text-shadow:
+    0 0 1px rgb(255 255 255 / 0.25),
+    0 2px 3px rgb(0 0 0 / 0.35);
+}
+.torus-chess .pawn-dir {
+  position: absolute;
+  right: -0.3em;
+  bottom: 0.05em;
+  font-size: 0.28em;
+  color: #c0392b;
+  text-shadow: 0 0 2px #fff;
+  font-family: system-ui, sans-serif;
+}
+
+.torus-chess .rank-label,
+.torus-chess .file-label {
+  width: var(--cell);
+  height: var(--cell);
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: calc(var(--cell) * 0.3);
+  font-variant-numeric: tabular-nums;
+}
+.torus-chess .rank-label {
+  width: calc(var(--cell) * 0.7);
+}
+.torus-chess .file-labels .file-label {
+  height: calc(var(--cell) * 0.6);
+}
+
+/* ---------- Promotion picker ---------- */
+
+.torus-chess .promotion {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.6);
+}
+.torus-chess .promotion > span {
+  margin-right: 6px;
+  color: var(--muted);
+}
+.torus-chess .promotion button.piece {
+  pointer-events: auto;
+  font-size: 40px;
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--light-sq);
+  cursor: pointer;
+}
+.torus-chess .promotion button.piece:hover {
+  background: #f6ecd4;
+  outline: 2px solid var(--accent);
+}
+.torus-chess .promotion .cancel {
+  margin-left: 6px;
+}
+
+/* ---------- Side panel ---------- */
+
+.torus-chess .panel {
+  width: 360px;
+  flex: 0 0 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: calc(100vh - var(--topbar-h) - 32px);
+}
+
+.torus-chess .panel h2 {
+  margin: 0 0 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.torus-chess .panel section,
+.torus-chess .status,
+.torus-chess .rules {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.torus-chess .status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+.torus-chess .status.over {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.torus-chess .turn-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex: none;
+  border: 1px solid #000;
+}
+.torus-chess .turn-dot.w {
+  background: #fffaf0;
+}
+.torus-chess .turn-dot.b {
+  background: #1f1b18;
+  border-color: #777;
+}
+
+.torus-chess .controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.torus-chess .controls label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.92rem;
+}
+
+.torus-chess select,
+.torus-chess .panel button,
+.torus-chess .promotion .cancel {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.torus-chess .panel button:hover:not(:disabled),
+.torus-chess select:hover,
+.torus-chess .promotion .cancel:hover {
+  border-color: var(--accent);
+}
+.torus-chess .panel button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.torus-chess .button-row {
+  display: flex;
+  gap: 8px;
+}
+.torus-chess .button-row button {
+  flex: 1;
+}
+.torus-chess .panel button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #1d1b19;
+  font-weight: 600;
+}
+.torus-chess .panel button.primary:hover:not(:disabled) {
+  background: #ecb95e;
+}
+
+.torus-chess .margin-controls {
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.torus-chess .margin-controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+.torus-chess .margin-controls input[type='range'] {
+  width: 120px;
+  accent-color: var(--accent);
+}
+.torus-chess .margin-controls output {
+  width: 1.5em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.torus-chess .toggle {
+  gap: 8px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.torus-chess .toggle input {
+  accent-color: #d6261c;
+}
+
+.torus-chess .captures {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.torus-chess .capture-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 26px;
+}
+.torus-chess .capture-label {
+  width: 80px;
+  flex: none;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.torus-chess .capture-pieces {
+  display: flex;
+  flex-wrap: wrap;
+}
+.torus-chess .piece.mini {
+  font-size: 22px;
+}
+/* Black glyphs need a light outline to show against the dark panel. */
+.torus-chess .piece.mini.black {
+  text-shadow:
+    1px 0 0 #cbbfa6, -1px 0 0 #cbbfa6, 0 1px 0 #cbbfa6, 0 -1px 0 #cbbfa6;
+}
+
+.torus-chess .moves {
+  flex: 1 1 auto;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+}
+.torus-chess .moves ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  max-height: 260px;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.85rem;
+}
+.torus-chess .moves li {
+  display: grid;
+  grid-template-columns: 36px 1fr 1fr;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.torus-chess .moves li:nth-child(odd) {
+  background: rgb(255 255 255 / 0.03);
+}
+.torus-chess .moves .num {
+  color: var(--muted);
+}
+
+.torus-chess .rules summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.torus-chess .rules ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 0.86rem;
+  color: #d6cfc1;
+}
+.torus-chess .rules li + li {
+  margin-top: 4px;
+}
+
+/* ---------- Narrow screens: stack the panel under the board ---------- */
+
+@media (max-width: 860px) {
+  .torus-chess .top-panel > * + * {
+    border-left: 0;
+  }
+  .torus-chess .layout {
+    flex-direction: column;
+    align-items: center;
+  }
+  .torus-chess .board {
+    --cell: min(calc((100vw - 52px) / (var(--cols) + 1)), 52px);
+  }
+  .torus-chess .panel {
+    width: 100%;
+    max-width: 520px;
+    flex: none;
+    max-height: none;
+  }
+}
