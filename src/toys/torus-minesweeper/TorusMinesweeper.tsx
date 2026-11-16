@@ -18,10 +18,12 @@ const MINE = '✹'
 interface Settings {
   difficulty: number
   margin: number
+  /** Dragging the board rolls the torus. */
+  dragToRoll: boolean
   showTorus: boolean
 }
 
-const DEFAULT_SETTINGS: Settings = { difficulty: 0, margin: 2, showTorus: true }
+const DEFAULT_SETTINGS: Settings = { difficulty: 0, margin: 2, showTorus: true, dragToRoll: true }
 const SETTINGS_KEY = 'torus-minesweeper:settings'
 const BEST_KEY = 'torus-minesweeper:best'
 
@@ -132,7 +134,7 @@ export default function TorusMinesweeper() {
     return el ? el.getBoundingClientRect().width : 28
   }
   const onPointerDown = (e: PointerEvent) => {
-    if (e.button !== 0) return
+    if (e.button !== 0 || !settings.dragToRoll) return
     drag.current = { x: e.clientX, y: e.clientY, view, moved: false, id: e.pointerId }
   }
   const onPointerMove = (e: PointerEvent) => {
@@ -243,13 +245,24 @@ export default function TorusMinesweeper() {
               <h1>Torus Minesweeper</h1>
               <span className="tagline">no edges, no corners</span>
             </div>
-            <div className="tool-group" title="You can also drag the board, scroll, or use the arrow keys">
+            <div
+              className="tool-group"
+              title={`You can also ${settings.dragToRoll ? 'drag the board, ' : ''}scroll, or use the arrow keys`}
+            >
               <button onClick={() => pan(0, -1)} aria-label="Roll left">←</button>
               <button onClick={() => pan(-1, 0)} aria-label="Roll up">↑</button>
               <button onClick={() => pan(1, 0)} aria-label="Roll down">↓</button>
               <button onClick={() => pan(0, 1)} aria-label="Roll right">→</button>
               <button onClick={() => setView({ offR: 0, offC: 0 })} aria-label="Reset view" title="Reset view">
                 ⟲
+              </button>
+              <button
+                className={settings.dragToRoll ? 'toggle-on' : undefined}
+                aria-pressed={settings.dragToRoll}
+                onClick={() => updateSettings({ dragToRoll: !settings.dragToRoll })}
+                title="Drag the board to roll it"
+              >
+                {settings.dragToRoll ? 'Drag: on' : 'Drag: off'}
               </button>
             </div>
             <label className="tool-group margin-control">

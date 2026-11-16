@@ -12,6 +12,8 @@ interface Props {
   ghostRows: number
   /** Number of wrapped "ghost" columns to show left and right of the board. */
   ghostCols: number
+  /** Whether dragging the board rolls the view. */
+  dragEnabled: boolean
   selected: number | null
   targets: Map<number, TargetKind>
   lastMove: { from: number; to: number } | null
@@ -83,7 +85,7 @@ export default function Chessboard(props: Props) {
   }
 
   const onPointerDown = (e: PointerEvent) => {
-    if (e.button !== 0) return
+    if (e.button !== 0 || !props.dragEnabled) return
     drag.current = { x: e.clientX, y: e.clientY, view, moved: false, id: e.pointerId }
   }
   const onPointerMove = (e: PointerEvent) => {
@@ -132,7 +134,7 @@ export default function Chessboard(props: Props) {
     <div className="board-frame">
       <div
         ref={boardRef}
-        className="board"
+        className={props.dragEnabled ? 'board' : 'board no-drag'}
         style={{ '--rows': displayRows.length, '--cols': displayCols.length } as CSSProperties}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}

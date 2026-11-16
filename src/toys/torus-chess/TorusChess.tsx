@@ -44,9 +44,11 @@ interface Settings {
   ghostCols: number
   showRoutes: boolean
   showTorus: boolean
+  /** Dragging the board rolls the torus. */
+  dragToRoll: boolean
 }
 
-const DEFAULT_SETTINGS: Settings = { ghostRows: 1, ghostCols: 1, showRoutes: true, showTorus: true }
+const DEFAULT_SETTINGS: Settings = { ghostRows: 1, ghostCols: 1, showRoutes: true, showTorus: true, dragToRoll: true }
 const SETTINGS_KEY = 'torus-chess:settings'
 
 function loadSettings(): Settings {
@@ -280,7 +282,7 @@ export default function TorusChess() {
 
             <div
               className="tool-group pan-group"
-              title="You can also drag the board, scroll, or use the arrow keys"
+              title={`You can also ${settings.dragToRoll ? 'drag the board, ' : ''}scroll, or use the arrow keys`}
             >
               <button onClick={() => pan(0, -1)} aria-label="Roll left">←</button>
               <button onClick={() => pan(-1, 0)} aria-label="Roll up">↑</button>
@@ -294,6 +296,14 @@ export default function TorusChess() {
                 ⟲
               </button>
               <button onClick={() => setView((v) => ({ ...v, flipped: !v.flipped }))}>Flip</button>
+              <button
+                className={settings.dragToRoll ? 'toggle-on' : undefined}
+                aria-pressed={settings.dragToRoll}
+                onClick={() => updateSettings({ dragToRoll: !settings.dragToRoll })}
+                title="Drag the board to roll it"
+              >
+                {settings.dragToRoll ? 'Drag: on' : 'Drag: off'}
+              </button>
             </div>
 
             <div className="tool-group margin-controls">
@@ -338,6 +348,7 @@ export default function TorusChess() {
               state={current}
               view={view}
               onViewChange={setView}
+              dragEnabled={settings.dragToRoll}
               ghostRows={settings.ghostRows}
               ghostCols={settings.ghostCols}
               selected={selected}

@@ -67,7 +67,7 @@
 }
 /* Each group is separated from the next by a thin divider. */
 .torus-chess .top-panel > * {
-  padding: 0 16px;
+  padding: 0 12px;
 }
 .torus-chess .top-panel > * + * {
   border-left: 1px solid var(--line);
@@ -103,6 +103,13 @@
 }
 .torus-chess .topbar button:hover {
   border-color: var(--accent);
+}
+.torus-chess .topbar button.toggle-on {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.torus-chess .topbar button[aria-pressed] {
+  min-width: 84px;
 }
 
 .torus-chess .layout {
@@ -142,6 +149,10 @@
 }
 .torus-chess .board:active {
   cursor: grabbing;
+}
+.torus-chess .board.no-drag,
+.torus-chess .board.no-drag:active {
+  cursor: default;
 }
 
 .torus-chess .board-row {
@@ -448,7 +459,7 @@
   white-space: nowrap;
 }
 .torus-chess .margin-controls input[type='range'] {
-  width: 120px;
+  width: 80px;
   accent-color: var(--accent);
 }
 .torus-chess .margin-controls output {

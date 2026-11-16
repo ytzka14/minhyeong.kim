@@ -93,6 +93,13 @@
 .torus-minesweeper .topbar button:hover {
   border-color: var(--accent);
 }
+.torus-minesweeper .topbar button.toggle-on {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.torus-minesweeper .topbar button[aria-pressed] {
+  min-width: 84px;
+}
 .torus-minesweeper .margin-control {
   gap: 8px;
   font-size: 0.9rem;
