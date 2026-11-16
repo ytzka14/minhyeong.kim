@@ -354,6 +354,7 @@
 
 .torus-chess .panel section,
 .torus-chess .status,
+.torus-chess .torus-view,
 .torus-chess .rules {
   background: var(--panel);
   border: 1px solid var(--line);
@@ -523,6 +524,22 @@
 }
 .torus-chess .moves .num {
   color: var(--muted);
+}
+
+.torus-chess .torus-view summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.torus-chess .torus-canvas {
+  display: block;
+  width: 100%;
+  height: 230px;
+  margin-top: 6px;
+  cursor: grab;
+  touch-action: none;
+}
+.torus-chess .torus-canvas:active {
+  cursor: grabbing;
 }
 
 .torus-chess .rules summary {

@@ -5,6 +5,7 @@ import {
   outcome, ROWS, type Color, type GameState, type Move, type Piece,
 } from './game/rules.ts'
 import { GLYPH, type View } from './game/view.ts'
+import TorusView from './TorusView.tsx'
 import './torus-chess.css'
 
 interface Ply {
@@ -42,9 +43,10 @@ interface Settings {
   ghostRows: number
   ghostCols: number
   showRoutes: boolean
+  showTorus: boolean
 }
 
-const DEFAULT_SETTINGS: Settings = { ghostRows: 1, ghostCols: 1, showRoutes: true }
+const DEFAULT_SETTINGS: Settings = { ghostRows: 1, ghostCols: 1, showRoutes: true, showTorus: true }
 const SETTINGS_KEY = 'torus-chess:settings'
 
 function loadSettings(): Settings {
@@ -370,6 +372,21 @@ export default function TorusChess() {
               <span className={`turn-dot ${current.turn}`} />
               {status}
             </div>
+
+            <details
+              className="torus-view"
+              open={settings.showTorus}
+              onToggle={(e) => updateSettings({ showTorus: e.currentTarget.open })}
+            >
+              <summary>Torus view</summary>
+              {settings.showTorus && (
+                <TorusView
+                  state={current}
+                  lastMove={last ? { from: last.from, to: last.to } : null}
+                  checkSquare={checkSquare}
+                />
+              )}
+            </details>
 
             <section className="controls">
               <label>
