@@ -26,6 +26,14 @@ export const toyProjects: ToyProject[] = [
     tags: ['React', 'TypeScript', 'Game AI'],
     component: lazy(() => import('./toys/torus-chess/TorusChess')),
   },
+  {
+    slug: 'torus-minesweeper',
+    title: 'Torus Minesweeper',
+    description:
+      'Minesweeper on a grid that wraps around in both directions, so there are no edges or corners and every cell has exactly eight neighbours. Includes a spinning 3D view of the minefield.',
+    tags: ['React', 'TypeScript', 'Canvas'],
+    component: lazy(() => import('./toys/torus-minesweeper/TorusMinesweeper')),
+  },
 ]
 
 export const findToyProject = (slug: string) => toyProjects.find((p) => p.slug === slug)

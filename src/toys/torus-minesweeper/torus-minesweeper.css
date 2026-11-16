@@ -1,0 +1,391 @@
+/* Every selector lives under .torus-minesweeper so the game and the homepage
+   cannot restyle each other. */
+
+.torus-minesweeper {
+  --bg: #15191f;
+  --panel: #1d232b;
+  --panel-2: #262e38;
+  --line: #34404d;
+  --text: #e4e9ef;
+  --muted: #8b97a5;
+  --accent: #5fc4b8;
+  --covered-a: #54687e;
+  --covered-b: #4c5f74;
+  --open-a: #28303a;
+  --open-b: #232a33;
+
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+}
+
+.torus-minesweeper button,
+.torus-minesweeper select {
+  font: inherit;
+  color: inherit;
+}
+
+.torus-minesweeper h1 {
+  font-family: inherit;
+}
+
+.torus-minesweeper .app {
+  /* Top panel plus the homepage nav, reserved when sizing the board. */
+  --topbar-h: calc(72px + var(--site-nav-h));
+  min-height: calc(100vh - var(--site-nav-h));
+}
+
+/* ---------- Top panel ---------- */
+
+.torus-minesweeper .topbar {
+  display: flex;
+  justify-content: center;
+  padding: 16px 16px 0;
+}
+.torus-minesweeper .top-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 0;
+  padding: 10px 6px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.torus-minesweeper .top-panel > * {
+  padding: 0 16px;
+}
+.torus-minesweeper .top-panel > * + * {
+  border-left: 1px solid var(--line);
+}
+.torus-minesweeper .brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.torus-minesweeper .brand h1 {
+  margin: 0;
+  font-size: 1.3rem;
+  white-space: nowrap;
+}
+.torus-minesweeper .tagline {
+  color: var(--muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.torus-minesweeper .tool-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.torus-minesweeper .topbar button {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 5px 10px;
+  min-width: 34px;
+  cursor: pointer;
+}
+.torus-minesweeper .topbar button:hover {
+  border-color: var(--accent);
+}
+.torus-minesweeper .margin-control {
+  gap: 8px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+.torus-minesweeper .margin-control input {
+  width: 100px;
+  accent-color: var(--accent);
+}
+.torus-minesweeper .margin-control output {
+  width: 1em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.torus-minesweeper .layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 16px;
+}
+
+/* ---------- Board ---------- */
+
+.torus-minesweeper .board-area {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.torus-minesweeper .board-frame {
+  padding: 8px;
+  background: #0f1216;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.45);
+}
+.torus-minesweeper .board {
+  --cell: min(
+    calc((100vh - var(--topbar-h) - 64px) / var(--rows)),
+    calc((100vw - 440px) / var(--cols)),
+    34px
+  );
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  touch-action: none;
+}
+.torus-minesweeper .board-row {
+  display: flex;
+}
+
+.torus-minesweeper .cell {
+  position: relative;
+  width: var(--cell);
+  height: var(--cell);
+  padding: 0;
+  margin: 0;
+  border: 0;
+  display: grid;
+  place-items: center;
+  font-size: calc(var(--cell) * 0.58);
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  outline: none;
+}
+.torus-minesweeper .cell.covered,
+.torus-minesweeper .cell.flagged {
+  background: var(--covered-a);
+  box-shadow:
+    inset 1px 1px 0 rgb(255 255 255 / 0.16),
+    inset -1px -1px 0 rgb(0 0 0 / 0.3);
+}
+.torus-minesweeper .cell.covered.odd,
+.torus-minesweeper .cell.flagged.odd {
+  background: var(--covered-b);
+}
+.torus-minesweeper .board.ready .cell.covered:hover,
+.torus-minesweeper .board.playing .cell.covered:hover {
+  background: #61778f;
+}
+.torus-minesweeper .cell.flagged {
+  color: #ff6b5b;
+  font-weight: 400;
+}
+.torus-minesweeper .cell.wrong {
+  color: #ffb3a8;
+  text-decoration: line-through;
+}
+.torus-minesweeper .cell.revealed {
+  background: var(--open-a);
+  cursor: default;
+}
+.torus-minesweeper .cell.revealed.odd {
+  background: var(--open-b);
+}
+.torus-minesweeper .cell.mine {
+  color: #f2f4f6;
+  font-weight: 400;
+}
+.torus-minesweeper .cell.revealed.exploded {
+  background: #c83428;
+}
+.torus-minesweeper .cell[data-n='1'] { color: #6cb4ff; }
+.torus-minesweeper .cell[data-n='2'] { color: #7bd88f; }
+.torus-minesweeper .cell[data-n='3'] { color: #ff7a6b; }
+.torus-minesweeper .cell[data-n='4'] { color: #c39bff; }
+.torus-minesweeper .cell[data-n='5'] { color: #ffb86b; }
+.torus-minesweeper .cell[data-n='6'] { color: #5fe0d6; }
+.torus-minesweeper .cell[data-n='7'] { color: #e8e8e8; }
+.torus-minesweeper .cell[data-n='8'] { color: #a8b0b8; }
+
+/* Wrapped copies outside the main grid. */
+.torus-minesweeper .cell.ghost {
+  filter: brightness(0.6) saturate(0.6);
+}
+
+/* The eight neighbours of the hovered number. */
+.torus-minesweeper .cell.neighbor::after,
+.torus-minesweeper .cell.hover-source::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.torus-minesweeper .cell.neighbor::after {
+  box-shadow: inset 0 0 0 2px rgb(95 196 184 / 0.85);
+  background: rgb(95 196 184 / 0.12);
+}
+.torus-minesweeper .cell.hover-source::after {
+  box-shadow: inset 0 0 0 2px rgb(95 196 184 / 0.4);
+}
+
+/* Dashed line wherever the visible board crosses the wrap. */
+.torus-minesweeper .cell.seam-top::before,
+.torus-minesweeper .cell.seam-left::before {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+.torus-minesweeper .cell.seam-top::before {
+  left: 0;
+  right: 0;
+  top: -1px;
+  border-top: 2px dashed rgb(95 196 184 / 0.7);
+}
+.torus-minesweeper .cell.seam-left::before {
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  border-left: 2px dashed rgb(95 196 184 / 0.7);
+}
+/* A cell on both seams draws both edges. */
+.torus-minesweeper .cell.seam-top.seam-left::before {
+  left: -1px;
+  right: 0;
+  top: -1px;
+  bottom: 0;
+  border-left: 2px dashed rgb(95 196 184 / 0.7);
+}
+
+/* ---------- Side panel ---------- */
+
+.torus-minesweeper .panel {
+  width: 340px;
+  flex: 0 0 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.torus-minesweeper .panel section,
+.torus-minesweeper .status,
+.torus-minesweeper .torus-view,
+.torus-minesweeper .rules {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.torus-minesweeper .status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 600;
+}
+.torus-minesweeper .status.won {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.torus-minesweeper .status.lost {
+  border-color: #c83428;
+  color: #ff8a7d;
+}
+.torus-minesweeper .counters {
+  display: flex;
+  gap: 14px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.torus-minesweeper .torus-view summary,
+.torus-minesweeper .rules summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.torus-minesweeper .torus-canvas {
+  display: block;
+  width: 100%;
+  height: 230px;
+  margin-top: 6px;
+  cursor: grab;
+  touch-action: none;
+}
+.torus-minesweeper .torus-canvas:active {
+  cursor: grabbing;
+}
+
+.torus-minesweeper .controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.torus-minesweeper .controls label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.92rem;
+}
+.torus-minesweeper select,
+.torus-minesweeper .panel button {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.torus-minesweeper select:hover,
+.torus-minesweeper .panel button:hover {
+  border-color: var(--accent);
+}
+.torus-minesweeper .button-row {
+  display: flex;
+  gap: 8px;
+}
+.torus-minesweeper .button-row button {
+  flex: 1;
+}
+.torus-minesweeper .panel button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #10201e;
+  font-weight: 600;
+}
+.torus-minesweeper .panel button.active {
+  border-color: #ff6b5b;
+  background: rgb(255 107 91 / 0.15);
+}
+.torus-minesweeper .best {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.torus-minesweeper .rules ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 0.86rem;
+  color: #c5cdd6;
+}
+.torus-minesweeper .rules li + li {
+  margin-top: 4px;
+}
+
+/* ---------- Narrow screens: stack the panel under the board ---------- */
+
+@media (max-width: 860px) {
+  .torus-minesweeper .top-panel > * + * {
+    border-left: 0;
+  }
+  .torus-minesweeper .layout {
+    flex-direction: column;
+    align-items: center;
+  }
+  .torus-minesweeper .board {
+    --cell: min(calc((100vw - 52px) / var(--cols)), 34px);
+  }
+  .torus-minesweeper .panel {
+    width: 100%;
+    max-width: 520px;
+    flex: none;
+  }
+}
