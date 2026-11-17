@@ -3,7 +3,7 @@ import { toyProjects } from '../toyProjects'
 function ToyProjects() {
   return (
     <section>
-      <h2>Toy Projects</h2>
+      <h2>Toys</h2>
       {toyProjects.length === 0 ? (
         <p className="empty-note">Small side projects will appear here soon.</p>
       ) : (

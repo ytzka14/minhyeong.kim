@@ -23,7 +23,7 @@ export const toyProjects: ToyProject[] = [
     description:
       'Chess on a 14 × 8 board that wraps around in both directions. Play against a computer opponent at four difficulty levels, or with a friend on one screen.',
     repo: 'https://github.com/ytzka14/torus-chess',
-    tags: ['React', 'TypeScript', 'Game AI'],
+    tags: ['Torus', 'Chess', 'Game AI', 'AI Generated Code'],
     component: lazy(() => import('./toys/torus-chess/TorusChess')),
   },
   {
@@ -31,7 +31,7 @@ export const toyProjects: ToyProject[] = [
     title: 'Torus Minesweeper',
     description:
       'Minesweeper on a grid that wraps around in both directions, so there are no edges or corners and every cell has exactly eight neighbours. Includes a spinning 3D view of the minefield.',
-    tags: ['React', 'TypeScript', 'Canvas'],
+    tags: ['Torus', 'Minesweeper', 'AI Generated Code'],
     component: lazy(() => import('./toys/torus-minesweeper/TorusMinesweeper')),
   },
 ]
